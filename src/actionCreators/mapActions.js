@@ -11,6 +11,5 @@ export function addMarker(longLat) {
 }
 
 export function toggleMarkerModal(e) {
-    console.log(e);
     return { type: ACTIONS.TOGGLE_MARKER_MODAL, event: e };
 }
