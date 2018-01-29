@@ -1,3 +1,19 @@
+let settings;
+
+switch (process.env.REACT_APP_API) {
+    case 'local':
+        settings = { API_ROOT: 'http://localhost:3001' };
+        break;
+    case 'qa':
+        settings = { API_ROOT: '' };
+        break;
+    default:
+        settings = {};
+}
+
+export const SETTINGS = settings;
+
+
 export const ACTIONS = {
     ADD_MARKER: 'ADD_MARKER',
     ADD_MARKER_SUCCESS: 'ADD_MARKER_SUCCESS',

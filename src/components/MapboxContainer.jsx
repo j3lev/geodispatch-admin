@@ -3,8 +3,7 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../actionCreators';
-import { Modal, ModalBody, ModalFooter, ModalHeader, Button } from 'reactstrap';
-
+import { AddMarkerModal } from './';
 
 class UnmappedMapboxContainer extends Component {
     constructor() {
@@ -24,19 +23,12 @@ class UnmappedMapboxContainer extends Component {
         
         return (
             <div>
-                { !!map.tempLongLat && <Modal fade={false} isOpen={ map.showMarkerModal }>
-                    <ModalHeader><i className='fas fa-map-marker-alt' /> Add marker</ModalHeader>
-                    <ModalBody><p>Add a marker at {map.tempLongLat[0]}, {map.tempLongLat[1]}?</p></ModalBody>
-                    <ModalFooter>
-                        <Button outline color='danger' disabled={ map.isMarkerLoading } onClick={ addMarker }>
-                            { !map.isMarkerLoading && <span><i className='fas fa-plus' /> Add</span> }
-                            { map.isMarkerLoading && <span><i className='fas fa-spin fa-spinner' /> Adding</span> }
-                        </Button>
-                        { !map.isMarkerLoading && <Button color='link' onClick={ toggleMarkerModal }>
-                            <i className='fas fa-times' /> Cancel
-                        </Button> }
-                    </ModalFooter>
-                </Modal> }
+                { !!map.tempLongLat && <AddMarkerModal 
+                    show={ map.showMarkerModal } 
+                    tempLongLat= { map.tempLongLat } 
+                    isLoading={ map.isMarkerLoading }
+                    onToggle={ toggleMarkerModal }
+                    onAdd={ addMarker } /> }
                 <ReactMapGL { ...this.state.mapSettings }
                     dragPan
                     onClick={toggleMarkerModal}
