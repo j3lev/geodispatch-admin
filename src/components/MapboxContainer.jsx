@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../actionCreators';
 import { AddMarkerModal } from './';
+import { Alert } from 'reactstrap';
 
 class UnmappedMapboxContainer extends Component {
     constructor() {
@@ -19,10 +20,11 @@ class UnmappedMapboxContainer extends Component {
     }
 
     render() {
-        const { map, addMarker, toggleMarkerModal } = this.props;
-        
+        const { map, addMarker, toggleMarkerModal, connection } = this.props;
         return (
             <div>
+                { connection.err && <Alert color='danger'>Connection Error</Alert> }
+                { connection.active && <Alert color='success'>Connection active</Alert> }
                 { !!map.tempLongLat && <AddMarkerModal 
                     show={ map.showMarkerModal } 
                     tempLongLat= { map.tempLongLat } 
@@ -50,6 +52,9 @@ class UnmappedMapboxContainer extends Component {
 }
 
 export const MapboxContainer = connect(
-     state => ({ map: state.mapReducer }), 
-     dispatch => bindActionCreators(actionCreators, dispatch)
+    state => ({ 
+        map: state.mapReducer,
+        connection: state.connectionReducer
+    }), 
+    dispatch => bindActionCreators(actionCreators, dispatch)
 )(UnmappedMapboxContainer);
