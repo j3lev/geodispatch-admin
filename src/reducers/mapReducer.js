@@ -6,16 +6,21 @@ export const mapReducer = (
 ) => {
     switch (action.type) {
         case ACTIONS.TOGGLE_MARKER_MODAL:
-            return { ...state, showMarkerModal: !state.showMarkerModal, tempLongLat: action.event && action.event.lngLat };
-        case ACTIONS.ADD_MARKER:
-            return { ...state, isMarkerLoading: true };
-        case ACTIONS.ADD_MARKER_SUCCESS:
-            return {
-                ...state, 
-                markers: [...(state.markers || []), { long: state.tempLongLat[0], lat: state.tempLongLat[1] }],
-                tempLongLat: null,
-                isMarkerLoading: false
-            };
+            return { ...state, showMarkerModal: !state.showMarkerModal, tempLongLat: action.longLat };
+        case ACTIONS.ADD_MARKER: {
+            let markers = [...state.markers];
+            markers.push({ longLat: action.longLat });
+            return { ...state, markers };
+        }
+        case ACTIONS.ADD_MARKER_SUCCESS: {
+            let markers = state.markers.map(m => {
+                if (m.longLat[0] === action.longLat[0] && m.longLat[1] === action.longLat[1]) {
+                    return { ...m, isPublished: true };
+                }
+                return m;
+            });
+            return { ...state, markers };
+        }
         default:
             return state;
     }

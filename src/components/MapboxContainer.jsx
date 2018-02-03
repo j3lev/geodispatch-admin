@@ -3,8 +3,10 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../actionCreators';
+import beacon from '../assets/beacon.svg';
+import rings from '../assets/rings.svg';
 import { AddMarkerModal } from './';
-import { Alert } from 'reactstrap';
+import { Alert, Fade } from 'reactstrap';
 
 class UnmappedMapboxContainer extends Component {
     constructor() {
@@ -17,6 +19,12 @@ class UnmappedMapboxContainer extends Component {
                 zoom: 12
             }
         };
+        this.onMarkerAdd = this.onMarkerAdd.bind(this);
+    }
+
+    onMarkerAdd() {
+        this.props.addMarker(this.props.map.tempLongLat);
+        this.props.toggleMarkerModal();
     }
 
     render() {
@@ -30,7 +38,7 @@ class UnmappedMapboxContainer extends Component {
                     tempLongLat= { map.tempLongLat } 
                     isLoading={ map.isMarkerLoading }
                     onToggle={ toggleMarkerModal }
-                    onAdd={ addMarker } /> }
+                    onMarkerAdd={ this.onMarkerAdd } /> }
                 <ReactMapGL { ...this.state.mapSettings }
                     dragPan
                     onClick={toggleMarkerModal}
@@ -40,11 +48,11 @@ class UnmappedMapboxContainer extends Component {
                     onViewportChange={(viewport) => {
                         this.setState({mapSettings: viewport});
                     }}>
-                    { (map.markers || []).map((m, i) => 
-                        <Marker key={i} longitude={m.long} offsetTop={-10} offsetLeft={-10} latitude={m.lat}>
-                            <i className='fas text-danger fa-exclamation-circle' />
-                        </Marker>) 
-                    }
+                    { (map.markers || []).map((m, i) =>
+                        <Marker key={i} longitude={m.longLat[0]} offsetTop={-32} offsetLeft={-33} latitude={m.longLat[1]}>
+                            <img className='no-select' draggable="false" src={ m.isPublished ? beacon : rings } />
+                        </Marker>
+                    )}
                 </ReactMapGL>
             </div>
         )
