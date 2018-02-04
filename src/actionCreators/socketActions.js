@@ -20,7 +20,6 @@ export function initializeSocket() {
         // All event listeners gotta go here
         socket.on('connect', () => {
             dispatch({ type: ACTIONS.SOCKET_CONNECTION_ESTABLISHED });
-            console.log('hello');
         });
     
         socket.on('connect_error', () => {
