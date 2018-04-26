@@ -16,7 +16,6 @@ export function initializeSocket() {
     socket = connectToDispatchServer();
 
     return dispatch => {
-
         // All event listeners gotta go here
         socket.on('connect', () => {
             dispatch({ type: ACTIONS.SOCKET_CONNECTION_ESTABLISHED });
